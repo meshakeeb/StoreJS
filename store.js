@@ -1,12 +1,12 @@
 var store = window.store = {};
 store = {
-    set: function( key, value, expires ) {
+    set: function( key, value, options ) {
 
         if( this.is_localstorage() ) {
-            return this.local( key, value, expires );
+            return this.local( key, value, options );
         }
         else {
-            return this.cookie( key, value, expires );
+            return this.cookie( key, value, options );
         }
     },
 
@@ -19,7 +19,7 @@ store = {
             return this.cookie( key );
         }
     },
-    
+
     remove: function( key ) {
         if( ! key ) {
             return false;
@@ -27,12 +27,12 @@ store = {
 
         localStorage.removeItem( key );
         this.cookie( key, '', { expires: -1 } );
-        
+
         return true;
     },
 
     // LocaStorge
-    local: function( key, value, expires ) {
+    local: function( key, value, options ) {
 
         if( ! key ) {
             return false;
@@ -43,7 +43,7 @@ store = {
 
             value = {
                 value: value,
-                expires: this.expiry( expires )
+                expires: this.expiry( options.expires )
             };
 
             localStorage.setItem( key, JSON.stringify( value ) );
