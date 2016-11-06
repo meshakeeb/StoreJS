@@ -18,10 +18,10 @@ var user = store.get('user')
 alert(user.name + ' likes ' + user.likes)
 
 // Store with expiration
-store.set('username', 'Shakeeb', { expires: '10s' } );
-store.set('username', 'Shakeeb', { expires: '10m' } );
-store.set('username', 'Shakeeb', { expires: '10h' } );
-store.set('username', 'Shakeeb', { expires: '10d' } );
+store.set('username', 'Shakeeb', { expires: '10s' } ); // expires in 10 seconds
+store.set('username', 'Shakeeb', { expires: '10m' } ); // expires in 10 minutes
+store.set('username', 'Shakeeb', { expires: '10h' } ); // expires in 10 hours
+store.set('username', 'Shakeeb', { expires: '10d' } ); // expires in 10 days
 ```
 
 
