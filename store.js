@@ -19,6 +19,17 @@ store = {
             return this.cookie( key );
         }
     },
+    
+    remove: function( key ) {
+        if( ! key ) {
+            return false;
+        }
+
+        localStorage.removeItem( key );
+        this.cookie( key, '', { expires: -1 } );
+        
+        return true;
+    },
 
     // LocaStorge
     local: function( key, value, expires ) {
