@@ -48,7 +48,7 @@ store = {
 
             localStorage.setItem( key, JSON.stringify( value ) );
 
-            return;
+            return true;
         }
 
         // Read
@@ -60,11 +60,7 @@ store = {
 
         item = JSON.parse( item );
 
-        if( !item.expires ) {
-            return item.value;
-        }
-
-        if( Date.now() > item.expires ) {
+        if( item.expires && Date.now() > item.expires ) {
             localStorage.removeItem( key );
             return false;
         }
