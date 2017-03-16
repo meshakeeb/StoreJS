@@ -2,26 +2,24 @@ var store = window.store = {};
 store = {
     set: function( key, value, options ) {
 
-        if( this.is_localstorage() ) {
+        if ( this.is_localstorage() ) {
             return this.local( key, value, options );
-        }
-        else {
+        } else {
             return this.cookie( key, value, options );
         }
     },
 
     get: function( key ) {
 
-        if( this.is_localstorage() ) {
+        if ( this.is_localstorage() ) {
             return this.local( key );
-        }
-        else {
+        } else {
             return this.cookie( key );
         }
     },
 
     remove: function( key ) {
-        if( ! key ) {
+        if ( ! key ) {
             return false;
         }
 
@@ -34,7 +32,7 @@ store = {
     // LocaStorge
     local: function( key, value, options ) {
 
-        if( ! key ) {
+        if ( ! key ) {
             return false;
         }
 
@@ -54,13 +52,13 @@ store = {
         // Read
         var item = localStorage.getItem( key );
 
-        if ( !item ) {
+        if ( ! item ) {
             return false;
         }
 
         item = JSON.parse( item );
 
-        if( item.expires && Date.now() > item.expires ) {
+        if ( item.expires && Date.now() > item.expires ) {
             localStorage.removeItem( key );
             return false;
         }
@@ -71,7 +69,7 @@ store = {
     // Cookies
     cookie: function( key, value, options ) {
 
-        if( ! key ) {
+        if ( ! key ) {
             return false;
         }
 
@@ -83,48 +81,47 @@ store = {
                 expires: '30d'
             }, options );
 
-            options.expires = this.expiry(options.expires);
+            options.expires = this.expiry( options.expires );
             var date = new Date();
-            date.setTime(options.expires);
+            date.setTime( options.expires );
 
-            if( 'object' === typeof value ) {
+            if ( 'object' === typeof value ) {
                 value = JSON.stringify( value );
             }
 
-            return (document.cookie = [
-                encodeURIComponent(key) + '=' + encodeURIComponent(value),
-                options.expires ? '; expires=' + date.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+            return ( document.cookie = [
+                encodeURIComponent( key ) + '=' + encodeURIComponent( value ),
+                options.expires ? '; expires=' + date.toUTCString() : '', // Use expires attribute, max-age is not supported by IE
                 options.path    ? '; path=' + options.path : '',
                 options.domain  ? '; domain=' + options.domain : '',
                 options.secure  ? '; secure' : ''
-            ].join(''));
+            ].join( '' ) );
         }
 
         // Read
-        var cookies = document.cookie ? document.cookie.split('; ') : [],
+        var cookies = document.cookie ? document.cookie.split( '; ' ) : [],
             rdecode = /(%[0-9A-Z]{2})+/g,
             i = 0,
             result = false;
 
-        for (; i < cookies.length; i++) {
+        for ( ; i < cookies.length; i++ ) {
 
-            var parts = cookies[i].split('='),
-                name = parts[0].replace(rdecode, decodeURIComponent),
-                cookie = parts.slice(1).join('=');
+            var parts = cookies[i].split( '=' ),
+                name = parts[0].replace( rdecode, decodeURIComponent ),
+                cookie = parts.slice( 1 ).join( '=' );
 
             if ( key === name ) {
 
-                if ( '"' === cookie.charAt(0) ) {
-                    cookie = cookie.slice(1, -1);
+                if ( '"' === cookie.charAt( 0 ) ) {
+                    cookie = cookie.slice( 1, -1 );
                 }
 
                 try {
-                    cookie = cookie.replace(rdecode, decodeURIComponent);
+                    cookie = cookie.replace( rdecode, decodeURIComponent );
                     try {
-                        cookie = JSON.parse(cookie);
-                    } catch (e) {}
-                }
-                catch(e) {}
+                        cookie = JSON.parse( cookie );
+                    } catch ( e ) {}
+                } catch ( e ) {}
 
                 result = cookie;
                 break;
@@ -135,37 +132,37 @@ store = {
     },
 
     is_localstorage: function() {
-        return typeof Storage !== 'undefined';
+        return 'undefined' !== typeof Storage;
     },
 
     expiry: function( val ) {
 
-        if( !val ) {
+        if ( ! val ) {
             return false;
         }
 
-        if( -1 === val ) {
+        if ( -1 === val ) {
             var d = new Date();
-            d.setYear(1970);
+            d.setYear( 1970 );
             return d.getTime();
         }
 
         var interval = parseInt( val ),
             unit = val.replace( interval, '' );
 
-        if( 'd' === unit ) {
+        if ( 'd' === unit ) {
             interval = interval * 24 * 60 * 60 * 1000;
         }
 
-        if( 'h' === unit ) {
+        if ( 'h' === unit ) {
             interval = interval * 60 * 60 * 1000;
         }
 
-        if( 'm' === unit ) {
+        if ( 'm' === unit ) {
             interval = interval * 60 * 1000;
         }
 
-        if( 's' === unit ) {
+        if ( 's' === unit ) {
             interval = interval * 1000;
         }
 
